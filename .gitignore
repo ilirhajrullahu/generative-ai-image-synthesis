@@ -8,6 +8,8 @@ __pycache__/
 data/
 
 exercise_4/data/
+exercise_5/data/
+exercise_5/__pycache__/
 
 # Distribution / packaging
 .Python
