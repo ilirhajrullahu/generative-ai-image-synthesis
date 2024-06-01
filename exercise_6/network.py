@@ -77,7 +77,7 @@ class Conv_Autoencoder(nn.Module):
            nn.ReLU(),
            nn.Flatten(), # 20x20x8 to 3200
            nn.Linear(3200,10),
-           nn.Softmax()
+           nn.Softmax(dim=1)
             )
         
         self.decoder = nn.Sequential(
@@ -85,7 +85,7 @@ class Conv_Autoencoder(nn.Module):
            nn.Linear(10,400),
            nn.ReLU(),
            nn.Linear(400,4000),
-           nn.Unflatten(1,(8,25,20)),
+           nn.Unflatten(1,(10,20,20)),
            nn.ConvTranspose2d(in_channels=10,out_channels=10,kernel_size=5),
            nn.ReLU(),
            nn.ConvTranspose2d(in_channels=10,out_channels=1,kernel_size=5),
@@ -93,9 +93,6 @@ class Conv_Autoencoder(nn.Module):
             )
         
     def forward(self, x):
-        x = x.view(-1, 1, 28, 28)
-        ########## YOUR CODE HERE #############
-        x = x.view(-1, 28*28)
         x = self.encoder(x)
         x = self.decoder(x)
         return x
