@@ -1,0 +1,87 @@
+
+1.1) see pdf
+
+1.4) 
+
+One of the problems that SGD faces is getting stuck in local minima. RMSProp, Adam and momentum try to solve this problem.
+Momentum helps because it integrates the gradient of the previous steps with the current gradient so that the model can converge faster.
+Also the accumulated gradient / velocity can help "knock/nudge" the gradient a little forward in order for it not to fall in local minimas.
+RMSProp adapts the learning rate for each parameter separately based on the magnitude of the gradients. 
+By doing this it allows for more significant updates for the parameters that aren't frequently updated. 
+It helps with mitigating vanishing learning rate in SGD.
+Adam combines both these concepts (it uses adaptive learning rates and momentum). Using this the model can converge faster and also Adam does bias correction.
+By fighting biases it achieves better accuracy.
+
+1.5)
+a)
+
+g(t):
+
+Purpose -> Creates a possible new candidate vector that can be added to the cell state vector.
+Non-linearity -> tanh 
+Reason for using tanh -> To limit the range of the output to [-1, 1] so that there are no exploding gradients.
+
+i(t):
+
+Purpose -> How much the candidate vector g(t) should be added to the cell state vector.
+Non-linearity -> sigmoid
+Reason for using sigmoid -> Useful for gating/allow varying degrees of new information.
+
+f(t):
+
+Purpose -> This gate decides how much of the previous cell state should be kept/forgotten.
+Non-linearity -> sigmoid
+Reason for using sigmoid -> Smooth choice between forgeting (0) and keeping (1) information from the previous cell state.
+
+o(t):
+
+Purpose -> How much of the cell state should be outputted and used for the next hidden state.
+Non-linearity -> sigmoid
+Reason for using sigmoid -> Smooth choice between 0 and 1 for controlling amount of cell information to be exposed at each step.
+
+b)
+
+All weights and biases for gates:
+W_gx with dimensions n×d
+W_gh with dimensions nxn
+b_g with dimension n
+W_ix with dimensions nxd
+W_ih with dimensions nxn
+b_i with dimension n
+W_fx with dimensions n×d
+W_fh with dimensions n×n
+b_f with dimension n
+W_ox with dimensions n×d
+W_oh with dimensions nxn
+b_o with dimension n
+
+
+All weights and biases for the output layer (k=number of classes):
+W_ph with dimensions k×n
+b_p with dimension k
+
+So we have:
+4 times n×d
+4 times nxn
+4 times n
+1 time kxn
+1 time k
+
+Total number of trainable parameters = 4nd + 4n^2 + 4n + kn + k 
+
+
+1.6)
+
+Accuracy for Short Sequences (T = 5):
+
+Vanilla RNN: Near-perfect accuracy for short sequences.
+LSTM: Near-perfect accuracy for short sequences.
+Accuracy for Longer Sequences (T > 5):
+
+Vanilla RNN: Accuracy drops significantly as sequence length increases due to the inability to capture long-term dependencies. 
+LSTM: Maintains high accuracy for longer sequences, effectively capturing long-term dependencies and demonstrating superior performance.
+
+Reasons can be:
+- Vanishing/Exploding gradients because of BPTT in RNNs
+- Limited memory due to recurrency in RNNs
+- RNN has fewer parameters than LSTM
