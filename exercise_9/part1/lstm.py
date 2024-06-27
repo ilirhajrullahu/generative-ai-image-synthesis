@@ -60,8 +60,6 @@ class LSTM(nn.Module):
         self.bp = nn.Parameter(torch.randn(num_classes))
 
     def forward(self, x):
-        #batch_size, seq_length, _ = x.size()
-        
         h_t = torch.zeros(self.batch_size, self.num_hidden).to(self.device)
         c_t = torch.zeros(self.batch_size, self.num_hidden).to(self.device)
         

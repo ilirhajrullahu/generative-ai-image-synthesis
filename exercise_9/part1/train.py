@@ -35,7 +35,26 @@ from lstm import LSTM
 
 ################################################################################
 
-def test_single_prediction(config):
+def test_single_prediction_lstm(config):
+    device = torch.device(config.device)
+    model = LSTM(config.input_length, config.input_dim, config.num_hidden, config.num_classes, config.batch_size, device).to(device)
+    dataset = PalindromeDataset(config.input_length + 1)
+    data_loader = DataLoader(dataset, config.batch_size, num_workers=1)
+    for step, (batch_inputs, batch_targets) in enumerate(data_loader):
+        print(batch_inputs.shape)
+        print(batch_targets.shape)
+        batch_inputs = batch_inputs.to(device)
+        batch_targets = batch_targets.to(device)
+        print('input',batch_inputs[0])
+        print('truth',batch_targets[0])
+        outputs = model(batch_inputs)
+        _, predicted = torch.max(outputs, 1)
+        print('prediction',predicted[0])
+        accuracy = (predicted[0] == batch_targets[0]).sum().item()
+        print('accuracy', accuracy)
+        break
+
+def test_single_prediction_rnn(config):
     device = torch.device(config.device)
     model = VanillaRNN(config.input_length, config.input_dim, config.num_hidden, config.num_classes, config.batch_size, device)
     dataset = PalindromeDataset(config.input_length + 1)
@@ -314,6 +333,7 @@ if __name__ == "__main__":
 
     # Train the model
     #train(config) # run this to test exercise 1.2
-    experiment_memorization_rnn(config) # run this to test exercise 1.3
-    #test_single_prediction(config)
+    #experiment_memorization_rnn(config) # run this to test exercise 1.3
+    #test_single_prediction_rnn(config)
     #experiment_memorization_lstm(config) # run this to test exercise 1.5 and 1.6
+    #test_single_prediction_lstm(config)
